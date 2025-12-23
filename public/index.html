@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlwaysAnon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { min-height: 100vh; background: radial-gradient(circle at top, #2b145a, #0b0616 60%); color: #fff; overflow: hidden; }
+    canvas#matrix { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; }
+    .page { display: none; min-height: 100vh; padding: 40px 20px; }
+    .page.active { display: flex; align-items: center; justify-content: center; }
+    .card { width: 100%; max-width: 900px; text-align: center; background: linear-gradient(180deg, rgba(138,77,255,0.15), rgba(0,0,0,0.6)); border: 1px solid rgba(138,77,255,0.35); border-radius: 22px; padding: 40px; box-shadow: 0 30px 80px rgba(138,77,255,0.25); }
+    h1 { font-size: 3rem; margin-bottom: 10px; letter-spacing: 2px; position: relative; }
+    .glitch::before, .glitch::after { content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%; overflow: hidden; }
+    .glitch::before { left: 2px; text-shadow: -2px 0 #ff00ff; animation: glitch 2s infinite linear alternate-reverse; }
+    .glitch::after { left: -2px; text-shadow: -2px 0 #00ffff; animation: glitch 1.5s infinite linear alternate-reverse; }
+    @keyframes glitch { 0% { clip-path: inset(0 0 80% 0); } 20% { clip-path: inset(10% 0 60% 0); } 40% { clip-path: inset(40% 0 30% 0); } 60% { clip-path: inset(20% 0 50% 0); } 80% { clip-path: inset(50% 0 20% 0); } 100% { clip-path: inset(0 0 80% 0); } }
+    h2 { font-size: 2rem; margin-bottom: 10px; }
+    p { color: #d8cffd; margin-bottom: 25px; }
+    .buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-top: 20px; }
+    .btn { padding: 16px 20px; border-radius: 14px; border: none; cursor: pointer; font-size: 1rem; font-weight: 600; color: #fff; background: linear-gradient(135deg, #5f2cff, #8a4dff); box-shadow: 0 10px 30px rgba(138,77,255,0.35); transition: all 0.3s ease; }
+    .btn.secondary { background: linear-gradient(135deg, #3b1a7a, #5a2cff); }
+    .btn:hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 20px 40px rgba(138,77,255,0.55); }
+    .back { margin-top: 25px; background: transparent; border: 1px solid rgba(138,77,255,0.5); }
+    .form { text-align: left; margin-top: 20px; }
+    .form label { display: block; margin: 12px 0 6px; color: #c9b8ff; }
+    .form input, .form select { width: 100%; padding: 14px; border-radius: 12px; border: none; outline: none; background: #120a26; color: #fff; border: 1px solid rgba(138,77,255,0.4); }
+    .chatbox { height: 260px; background: #0f0822; border-radius: 16px; padding: 15px; overflow-y: auto; border: 1px solid rgba(138,77,255,0.4); margin-bottom: 15px; }
+    footer { margin-top: 30px; font-size: 0.85rem; color: #8d7cff; }
+  </style>
+</head>
+<body>
+<canvas id="matrix"></canvas>
+
+<!-- HOME -->
+<section id="home" class="page active">
+  <div class="card">
+    <h1 class="glitch" data-text="AlwaysAnon">AlwaysAnon</h1>
+    <p id="typing"></p>
+    <div class="buttons">
+      <button class="btn" onclick="go('profile')">Masuk Ke Profile</button>
+      <button class="btn" onclick="go('market')">Masuk Ke Marketplace</button>
+      <button class="btn" onclick="go('info')">Informasi</button>
+      <button class="btn" onclick="go('chat')">AnonAI</button>
+    </div>
+    <footer>© 2025 AlwaysAnon • Purple Anonymous Network<br><span id="online"></span></footer>
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="page">
+  <div class="card">
+    <h2>AwlyasAnon</h2>
+    <p><strong>Bio:</strong> Kacung Lupada</p>
+    <button class="btn back" onclick="back()">← Kembali</button>
+  </div>
+</section>
+
+<!-- MARKETPLACE -->
+<section id="market" class="page">
+  <div class="card">
+    <h2>Marketplace</h2>
+    <p>Sewa Bot Untuk Menjaga Grup Anda</p>
+    <button class="btn" onclick="go('sewa')">Sewa</button><hr style="margin:30px 0; border-color: rgba(138,77,255,0.3)">
+    <p><strong>Beli Panel Ptreducytl</strong><br>Untuk menjalankan bot pribadi Anda dengan stabil, cepat, dan aman.</p>
+    <button class="btn secondary" onclick="go('panel')">Beli</button>
+    <button class="btn back" onclick="back()">← Kembali</button>
+  </div>
+</section>
+
+<!-- SEWA BOT -->
+<section id="sewa" class="page">
+  <div class="card">
+    <h2>Sewa Bot Grup</h2>
+    <div class="form">
+      <label>Masukan Link Grup Anda</label>
+      <input id="linkGrup" placeholder="https://chat.whatsapp.com/..." />
+      <label>Masukan Waktu Sewa</label>
+      <input id="waktuSewa" placeholder="Contoh: 30 Hari" />
+    </div>
+    <button class="btn" onclick="buy('BOT')">Beli</button>
+    <button class="btn back" onclick="back()">← Kembali</button>
+  </div>
+</section>
+
+<!-- PANEL -->
+<section id="panel" class="page">
+  <div class="card">
+    <h2>Beli Panel Ptreducytl</h2>
+    <div class="form">
+      <label>Masukan Username Panel Anda</label>
+      <input id="userPanel" placeholder="username_panel" />
+      <label>Masukan Jumlah RAM</label>
+      <input id="ramPanel" placeholder="Contoh: 2GB / 4GB" />
+    </div>
+    <button class="btn" onclick="buy('PANEL')">Beli</button>
+    <button class="btn back" onclick="back()">← Kembali</button>
+  </div>
+</section>
+
+<!-- INFO -->
+<section id="info" class="page">
+  <div class="card">
+    <h2>Informasi</h2>
+    <p>AlwaysAnon adalah platform anonim modern yang dirancang untuk komunitas digital. Fokus kami adalah keamanan, privasi, dan kebebasan berekspresi. Semua layanan dibuat dengan konsep minimal data, tanpa pelacakan berlebihan, dan mengutamakan kenyamanan pengguna.</p>
+    <p>Gunakan layanan secara bijak. Kami percaya teknologi adalah alat, bukan senjata. Stay smart, stay anonymous.</p>
+    <button class="btn back" onclick="back()">← Kembali</button>
+  </div>
+</section>
+
+<!-- CHAT -->
+<section id="chat" class="page">
+  <div class="card">
+    <h2>AnonAI</h2>
+    <p>Hello I'm AnonAi, Let's Chat If You Need Help</p>
+    <div class="chatbox" id="chatbox">
+      <div><strong>AnonAI:</strong> 👋 Halo! Aku siap membantu.</div>
+    </div>
+    <div class="form">
+      <input id="userInput" placeholder="Ketik pesan kamu..." />
+    </div>
+    <button class="btn" onclick="sendChat()">Chat With AnonAI</button>
+    <p style="margin-top:10px; font-size:0.9rem">(AI via backend OpenRouter)</p>
+    <button class="btn back" onclick="back()">← Kembali</button>
+  </div>
+</section>
+
+<script>
+/* ================= NAV ================= */
+let historyStack=['home'];
+function go(id){document.querySelector('.page.active').classList.remove('active');document.getElementById(id).classList.add('active');historyStack.push(id);}
+function back(){if(historyStack.length>1){const current=historyStack.pop();document.getElementById(current).classList.remove('active');const prev=historyStack[historyStack.length-1];document.getElementById(prev).classList.add('active');}}
+
+/* ================= ORDER ================= */
+function code(){ return 'ANON-'+Math.random().toString(36).substring(2,8).toUpperCase();}
+function buy(type){
+  const c=code(); let barang=''; let harga=0;
+  if(type==='BOT'){ const waktu=document.getElementById('waktuSewa').value; const menit=parseInt(waktu)||1; harga=menit*1000; barang=`Sewa Bot (${menit} menit)`; }
+  if(type==='PANEL'){ const ram=document.getElementById('ramPanel').value; const angka=parseInt(ram)||1; harga=angka*2000; if(harga>10000) harga=Math.floor(Math.random()*(10000-6000)+6000); barang=`Panel Ptreducytl (${angka}GB RAM)`; }
+  const text=encodeURIComponent(`Halo Anon Pesanan Datang📦\nBarang: ${barang}\nHarga: Rp${harga}\nCode: ${c}\nProcess Now`);
+  window.open(`https://wa.me/60175953518?text=${text}`,'_blank');
+}
+
+/* ================= TYPING ================= */
+const text='Halo, Selamat Datang Ke AlwaysAnon';
+let i=0; const typing=document.getElementById('typing');
+function type(){if(i<text.length){typing.innerHTML+=text.charAt(i);i++;setTimeout(type,55);}}
+if(typing) type();
+
+/* ================= FAKE ONLINE ================= */
+const online=document.getElementById('online');
+if(online){let users=Math.floor(Math.random()*50)+20; setInterval(()=>{users+=Math.floor(Math.random()*3)-1;if(users<10)users=10;online.innerText=`🟢 ${users} Anonymous Online`;},3000);}
+
+/* ================= MATRIX BACKGROUND ================= */
+const canvas=document.getElementById('matrix'); const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+const letters='01ANONAI'; const fontSize=14; const columns=canvas.width/fontSize; const drops=[];
+for(let x=0;x<columns;x++) drops[x]=Math.random()*canvas.height;
+function draw(){ctx.fillStyle='rgba(0,0,0,0.08)';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#8a4dff';ctx.font=fontSize+'px monospace';
+for(let i=0;i<drops.length;i++){const text=letters.charAt(Math.floor(Math.random()*letters.length));ctx.fillText(text,i*fontSize,drops[i]*fontSize);if(drops[i]*fontSize>canvas.height && Math.random()>0.975)drops[i]=0; drops[i]++;}}
+setInterval(draw,50);
+
+/* ================= ANTI INSPECT (BASIC) ================= */
+document.addEventListener('contextmenu', e=>e.preventDefault());
+document.onkeydown=e=>{if(e.keyCode===123||(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key))){return false;}}
+
+/* ================= ANONAI CHAT ================= */
+const OPENROUTER_API_KEY="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";
+async function sendChat(){
+  const input=document.getElementById('userInput');
+  const chatbox=document.getElementById('chatbox');
+  const msg=input.value.trim(); if(!msg) return;
+
+  // tampilkan pesan user
+  const userDiv=document.createElement('div'); userDiv.innerHTML=`<strong>You:</strong> ${msg}`;
+  chatbox.appendChild(userDiv);
+  input.value=''; chatbox.scrollTop=chatbox.scrollHeight;
+
+  // tampilkan placeholder AI
+  const aiDiv=document.createElement('div');
+  aiDiv.innerHTML=`<strong>AnonAI:</strong> <span class="typing">...</span>`;
+  chatbox.appendChild(aiDiv);
+  chatbox.scrollTop=chatbox.scrollHeight;
+
+  try{
+    const res=await fetch("https://openrouter.ai/api/v1/chat/completions",{
+      method:"POST",
+      headers:{"Authorization":"Bearer "+OPENROUTER_API_KEY,"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"openai/gpt-3.5-turbo",
+        messages:[
+          {role:"system", content:"Kamu adalah AnonAI. Jawab santai, singkat, dan membantu."},
+          {role:"user", content:msg}
+        ],
+        temperature:0.7
+      })
+    });
+    const data=await res.json();
+    const reply=data?.choices?.[0]?.message?.content||"AnonAI tidak merespon.";
+
+    // hapus placeholder ...
+    const typingSpan=aiDiv.querySelector('.typing');
+    if(typingSpan) typingSpan.remove();
+
+    // tampilkan AI reply per karakter
+    let idx=0;
+    function typeChar(){
+      if(idx<reply.length){
+        aiDiv.innerHTML += reply.charAt(idx);
+        idx++;
+        chatbox.scrollTop=chatbox.scrollHeight;
+        setTimeout(typeChar,35);
+      }
+    }
+    typeChar();
+  }catch(err){
+    aiDiv.innerHTML=`<div style="color:red"><strong>AnonAI:</strong> Error koneksi</div>`;
+  }
+}
+</script>
+</body>
+  </html>
